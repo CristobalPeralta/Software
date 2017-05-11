@@ -22,7 +22,7 @@ class SegmentImage():
 
 
         #Subscribirce al topico "/duckiebot/camera_node/image/raw"
-        self.image_subscriber = None 
+        self.image_subscriber = rospy.Subscriber("/duckiebot/camera_node/image/raw", Image, process_callback)
 
         #Clase necesaria para transformar el tipo de imagen
         self.bridge = CvBridge()
@@ -44,16 +44,18 @@ class SegmentImage():
         frame = self.cv_image
 
         #Cambiar tipo de color de BGR a HSV
-
+        image_out = cv2.cvtColor(frame,cv2.BGR2HSV)
         # Filtrar colores de la imagen en el rango utilizando 
         #mask = cv2.inRange(image, lower_limit, upper_limit)
+        mask = cv2.inRange(image_out, lower_blue, upper_blue)
 
         # Bitwise-AND mask and original image
         segment_image = cv2.bitwise_and(frame,frame, mask= mask)
 
         #Publicar imagenes
-
-
+        image_out = cv2.cvtColor(segment_image,cv2.HSV2BGR)
+		msg = bridge.cv2_to_imgmsg(image_out, "brg8")
+		# Punblicar msg a topico XXXXX
 
 def main():
 
