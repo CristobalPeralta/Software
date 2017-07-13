@@ -19,8 +19,8 @@ def main():
 def process_callback(msj):
     msg = Twist2DStamped()
     msg.header.stamp = rospy.get_rostime()     
-    msg.omega = msj.axes[0]
-    msg.v = msj.axes[1]
+    msg.omega = 20*msj.axes[0]
+    msg.v = 5*msj.axes[1]
     base_pub.publish(msg)
 
 
